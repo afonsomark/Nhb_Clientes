@@ -1,7 +1,17 @@
+using Nhb_Clientes.Models.Caching;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+//Configurando o Redis
+builder.Services.AddScoped<ICachingService, CachingService>();
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.InstanceName = "redisClientes";
+    options.Configuration = "localhost:6379";
+});
 
 var app = builder.Build();
 

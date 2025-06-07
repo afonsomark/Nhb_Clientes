@@ -1,10 +1,11 @@
+using FluentNHibernate.Conventions;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Nhb_Clientes.Models;
-using System.Diagnostics;
+using Nhb_Clientes.Models.Caching;
 using NHibernate;
-using NHibernate.Linq;
-using System.Linq;
-using System.Web;
+using NuGet.Protocol;
+using System.Diagnostics;
 using ISession = NHibernate.ISession;
 
 namespace Nhb_Clientes.Controllers
@@ -13,10 +14,12 @@ namespace Nhb_Clientes.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ISession _session;
+        private readonly ICachingService _cache;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ICachingService cache)
         {
             _logger = logger;
+            _cache = cache;
         }
 
         public IActionResult Privacy()
@@ -24,12 +27,24 @@ namespace Nhb_Clientes.Controllers
             return View();
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            using (ISession session = Nhb_Helper.OpenSession())
+            var clienteCache = await _cache.GetAsync("clientes");
+            var clientes = new List<Clientes>();
+
+            if (!string.IsNullOrEmpty(clienteCache))
             {
-                var clientes = session.Query<Clientes>().ToList();
+                clientes = JsonConvert.DeserializeObject<List<Clientes>>(clienteCache);
                 return View(clientes);
+            }
+            else
+            {
+                using (ISession session = Nhb_Helper.OpenSession())
+                {
+                    List<Clientes> listaClientes = session.Query<Clientes>().ToList();
+                    await _cache.SetAsync("clientes", JsonConvert.SerializeObject(listaClientes));
+                    return View(listaClientes);
+                }
             }
         }
 
@@ -60,12 +75,23 @@ namespace Nhb_Clientes.Controllers
             }
         }
 
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            using (ISession session = Nhb_Helper.OpenSession())
+            var clienteCache = await _cache.GetAsync(id.ToString());
+            Clientes? cliente;
+            if (!string.IsNullOrEmpty(clienteCache))
             {
-                var clientes = session.Get<Clientes>(id);
-                return View(clientes);
+                cliente = JsonConvert.DeserializeObject<Clientes>(clienteCache);
+                return View(cliente);
+            }
+            else
+            {
+                using (ISession session = Nhb_Helper.OpenSession())
+                {
+                    cliente = session.Get<Clientes>(id);
+                    await _cache.SetAsync(id.ToString(), JsonConvert.SerializeObject(cliente));
+                    return View(cliente);
+                }
             }
         }
 
