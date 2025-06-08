@@ -65,6 +65,9 @@ namespace Nhb_Clientes.Controllers
                     {
                         session.Save(cliente);
                         transaction.Commit();
+
+                        List<Clientes> listaClientes = session.Query<Clientes>().ToList();
+                        _cache.SetAsync("clientes", JsonConvert.SerializeObject(listaClientes));
                     }
                 }
                 return RedirectToAction("Index");
@@ -125,6 +128,9 @@ namespace Nhb_Clientes.Controllers
                     {
                         session.Save(clienteAlterado);
                         transaction.Commit();
+
+                        List<Clientes> listaClientes = session.Query<Clientes>().ToList();
+                        _cache.SetAsync("clientes", JsonConvert.SerializeObject(listaClientes));
                     }
                 }
                 return RedirectToAction("Index");
@@ -157,6 +163,9 @@ namespace Nhb_Clientes.Controllers
                     {
                         session.Delete(cliente);
                         transaction.Commit();
+
+                        List<Clientes> listaClientes = session.Query<Clientes>().ToList();
+                        _cache.SetAsync("clientes", JsonConvert.SerializeObject(listaClientes));
                     }
                 }
                 return RedirectToAction("Index");
