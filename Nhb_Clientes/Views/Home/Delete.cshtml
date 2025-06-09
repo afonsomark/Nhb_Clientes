@@ -4,11 +4,9 @@
     ViewData["Title"] = "Excluir";
 }
 
-<h1>Delete</h1>
-
-<h3>Are you sure you want to delete this?</h3>
+<h3>Excluir</h3>
 <div>
-    <h4>Clientes</h4>
+    <h4>Deseja excluir este registro?</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -50,7 +48,7 @@
     </dl>
     
     <form asp-action="Delete">
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Lista de Clientes</a>
+        <input type="submit" value="Excluir" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-outline-warning">Lista de Clientes</a>
     </form>
 </div>
