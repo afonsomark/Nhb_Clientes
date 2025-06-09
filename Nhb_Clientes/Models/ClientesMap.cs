@@ -14,6 +14,7 @@ namespace Nhb_Clientes.Models
             Map(x => x.Telefone2);
             Map(x => x.Telefone3);
             Map(x => x.FoneValido);
+            Map(x => x.Tel_Ativo);
             Table("Clientes");
         }
     }

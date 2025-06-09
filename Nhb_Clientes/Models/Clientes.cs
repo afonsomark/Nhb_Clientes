@@ -10,5 +10,6 @@
         public virtual string? Telefone2 { get; set; }
         public virtual string? Telefone3 { get; set; }
         public virtual int FoneValido { get; set; }
+        public virtual string? Tel_Ativo { get; set; }
     }
 }

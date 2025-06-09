@@ -1,7 +1,7 @@
 ﻿@model Nhb_Clientes.Models.Clientes
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Novo";
 }
 
 <h1>Create</h1>
@@ -44,10 +44,14 @@
             </div>
             <div class="form-group">
                 <label asp-for="FoneValido" class="control-label"></label>
-                <input asp-for="FoneValido" class="form-control" />
-                <span asp-validation-for="FoneValido" class="text-danger"></span>
+                <select asp-for="FoneValido" class="form-control" id="FoneValido">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
             </div>
             <div class="form-group">
+                <input asp-for="Tel_Ativo" class="form-control" value="" id="Tel_Ativo" hidden />
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
@@ -61,3 +65,37 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#FoneValido').change(function (event) {
+            let fone = event.currentTarget.value;
+
+            let tel_1 = $('#Telefone1').val();
+            let tel_2 = $('#Telefone2').val();
+            let tel_3 = $('#Telefone3').val();
+
+            switch (fone) {
+                case "1":
+                    {
+                        $('#FoneValido').val("1");
+                        $('#Tel_Ativo').val(tel_1);
+                    }
+                    break;
+                case "2":
+                    {
+                        $('#FoneValido').val("2");
+                        $('#Tel_Ativo').val(tel_2);
+                    }
+                    break;
+                case "3":
+                    {
+                        $('#FoneValido').val("3");
+                        $('#Tel_Ativo').val(tel_3);
+                    }
+                    break;
+            }
+        });
+    });
+</script>

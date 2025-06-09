@@ -22,7 +22,7 @@ namespace Nhb_Clientes.Controllers
             _cache = cache;
         }
 
-        public IActionResult Privacy()
+        public IActionResult Info()
         {
             return View();
         }
@@ -124,6 +124,7 @@ namespace Nhb_Clientes.Controllers
                     clienteAlterado.Telefone2 = cliente.Telefone2;
                     clienteAlterado.Telefone3 = cliente.Telefone3;
                     clienteAlterado.FoneValido = cliente.FoneValido;
+                    clienteAlterado.Tel_Ativo = cliente.Tel_Ativo;
                     using (ITransaction transaction = session.BeginTransaction())
                     {
                         session.Save(clienteAlterado);
